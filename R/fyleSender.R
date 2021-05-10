@@ -1,5 +1,10 @@
 
-fyleSender <- function(email_to, email_attachments = NULL, email_subject = "subject here", email_body = "body here", email_cc = "", email_bcc = "") {
+fyleSender <- function(email_to,
+                       email_attachments = NULL,
+                       email_subject = "subject here",
+                       email_body = "body here",
+                       email_cc = "",
+                       email_bcc = "") {
 
   # From http://www.seancarney.ca/2020/10/07/sending-email-from-outlook-in-r/
 
