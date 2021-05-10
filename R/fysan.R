@@ -1,14 +1,14 @@
 fysan <- function(batch = 3,
-                  interval = 60,
+                  interval = 15, #seconds
                   fyle_location = ".",
                   fyle_extension = NULL,
                   fyle_exclusions = NULL,
                   list_recursive = TRUE,
                   list_full_names = TRUE,
                   email_to,
-                  email_attachments = NULL,
-                  email_subject = "subject here",
-                  email_body = "body here",
+                  #email_attachments = NULL,
+                  email_subject = "subject",
+                  email_body = "body",
                   email_cc = "",
                   email_bcc = "") {
 
@@ -37,8 +37,18 @@ fysan <- function(batch = 3,
   number_of_batches <- ceiling(nrow(files_to_send) / batch)
   batches <- split(files_to_send, factor(sort(rank(row.names(files_to_send))%%number_of_batches)))
 
-
   # loop through batches
+  for (df in batches) {
+    print(df$file)
+    fyleSender(
+      email_to = email_to,
+      email_attachments = as.character(df$file),
+      email_subject = email_subject,
+      email_body = email_body,
+      email_cc = email_cc,
+      email_bcc = email_bcc
+      )
+  }
 
   # update log
   write.table(files_to_send, "fysanlog.csv", sep = ",", col.names = !file.exists("fysanlog.csv"), append = T, row.names = FALSE)
@@ -47,7 +57,17 @@ fysan <- function(batch = 3,
   return(batches) #files_to_send)
 }
 
-fysan(fyle_location = "C:\\Users\\hahla\\Desktop\\Toss\\fysan_tests",
+### delete
+unlink("fysanlog.csv")
+###
+
+fysan(batch = 7,
+      email_to = "hahlas@hotmail.com",
+      email_subject = "try2",
+      email_body = "mert mert",
+      email_cc = "",
+      email_bcc = "",
+      fyle_location = "C:\\Users\\hahla\\Desktop\\Toss\\fysan_tests",
       fyle_extension = "txt",
       fyle_exclusions = "red")
 
