@@ -46,5 +46,28 @@ fyleSender("hahlas@hotmail.com",
            fyleIdentifier(fyle_location = test_directory, fyle_extension = "jpg", fyle_exclusions = "red"),
            "test emailxxx", "here is the body")
 
+
+
+# Test 3 ------------------------------------------------------------------
+
+### delete log
+unlink("fysanlog.csv")
+
+fysan(batch = 3,
+      interval = 2, #seconds
+      email_to = "hahlas@hotmail.com",
+      email_subject = "try3",
+      email_body = "mert mert",
+      email_cc = "",
+      email_bcc = "",
+      fyle_location = getwd(), #"C:\\Users\\hahla\\Desktop\\Toss\\fysan_tests",
+      fyle_extension = "md",
+      fyle_exclusions = "red")
+
+data.frame(file = fyleIdentifier(fyle_extension = "log"),
+           send_date = Sys.Date())
+
+
 # Remove directories
 unlink(test_directory, recursive = TRUE, force = TRUE)
+

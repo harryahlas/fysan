@@ -22,9 +22,15 @@ fysan <- function(batch = 3,
   }
 
   # Identify files
-  files_to_send <- data.frame(file = fyleIdentifier(fyle_location = fyle_location,
+  files_to_send <- fyleIdentifier(fyle_location = fyle_location,
                                   fyle_extension = fyle_extension,
-                                  fyle_exclusions = fyle_exclusions),
+                                  fyle_exclusions = fyle_exclusions)
+
+  # If no files found, then end
+  if(length(files_to_send) == 0) {warning("No matching files found"); return()}
+
+  # Create data frame
+  files_to_send <- data.frame(file = files_to_send,
                               send_date = Sys.Date())
 
   # Remove files that were already sent
@@ -39,6 +45,7 @@ fysan <- function(batch = 3,
 
   # loop through batches
   for (df in batches) {
+    print(paste("Emailing batch", names(df), "of", length(batches)))
     print(df$file)
     fyleSender(
       email_to = email_to,
@@ -48,6 +55,7 @@ fysan <- function(batch = 3,
       email_cc = email_cc,
       email_bcc = email_bcc
       )
+    Sys.sleep(interval)
   }
 
   # update log
@@ -56,21 +64,3 @@ fysan <- function(batch = 3,
 
   return(batches) #files_to_send)
 }
-
-### delete
-unlink("fysanlog.csv")
-###
-
-fysan(batch = 7,
-      email_to = "hahlas@hotmail.com",
-      email_subject = "try2",
-      email_body = "mert mert",
-      email_cc = "",
-      email_bcc = "",
-      fyle_location = "C:\\Users\\hahla\\Desktop\\Toss\\fysan_tests",
-      fyle_extension = "txt",
-      fyle_exclusions = "red")
-
-fyleSender("hahlas@hotmail.com",
-             fyleIdentifier(fyle_location = test_directory, fyle_extension = "jpg", fyle_exclusions = "red"),
-             "test emailxxx", "here is the body")
