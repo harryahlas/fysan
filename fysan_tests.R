@@ -36,7 +36,7 @@ sampleDirectoryBuilder <- function(new_directory_tag) {#print(new_directory_tag)
 }
 
 # Directory names
-sample_directory_list <- c("blue", "gold", "red", "white")
+sample_directory_list <- sample(colors(), 10)
 
 # Build directories
 lapply(sample_directory_list, sampleDirectoryBuilder)

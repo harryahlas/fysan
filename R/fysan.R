@@ -34,19 +34,23 @@ fysan <- function(batch = 3,
   if(nrow(files_to_send) == 0) {warning("No Files Left to Send");return()}
 
   # split into batches
+  number_of_batches <- ceiling(nrow(files_to_send) / batch)
+  batches <- split(files_to_send, factor(sort(rank(row.names(files_to_send))%%number_of_batches)))
 
-  # loop through fyleSender and update log
+
+  # loop through batches
 
   # update log
   write.table(files_to_send, "fysanlog.csv", sep = ",", col.names = !file.exists("fysanlog.csv"), append = T, row.names = FALSE)
 
 
-  return(files_to_send)
+  return(batches) #files_to_send)
 }
+
 fysan(fyle_location = "C:\\Users\\hahla\\Desktop\\Toss\\fysan_tests",
       fyle_extension = "txt",
       fyle_exclusions = "red")
 
-    fyleSender("hahlas@hotmail.com",
+fyleSender("hahlas@hotmail.com",
              fyleIdentifier(fyle_location = test_directory, fyle_extension = "jpg", fyle_exclusions = "red"),
              "test emailxxx", "here is the body")
