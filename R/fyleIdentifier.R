@@ -1,3 +1,13 @@
+#' Find Files in a Directory
+#'
+#' Enhanced version of *list.files()* that allows you to exclude files containing specific strings.
+#' @param fyle_location Location of directory to search. Will default to search recursively. Required.
+#' @param fyle_extension The extension(s) you want to search for, e.g. <code>c("txt", "R")</code> will send files that end in .txt or .R
+#' @param fyle_exclusions Files with this string anywhere in the file name or location will not be sent.  Optional.
+#' @param list_recursive Set to FALSE if you do not want to search through children of *fyle_location*. Generally keep TRUE.
+#' @param list_full_names List the full names of the location. Generally keep TRUE
+#' @keywords filesearch, find, files, extension
+#' @export
 
 fyleIdentifier <- function(fyle_location = ".",
                            fyle_extension = NULL,

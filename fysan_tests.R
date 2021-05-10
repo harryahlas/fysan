@@ -56,18 +56,26 @@ unlink("fysanlog.csv")
 fysan(batch = 3,
       interval = 2, #seconds
       email_to = "hahlas@hotmail.com",
-      email_subject = "try3",
+      email_subject = "try5",
       email_body = "mert mert",
       email_cc = "",
       email_bcc = "",
       fyle_location = getwd(), #"C:\\Users\\hahla\\Desktop\\Toss\\fysan_tests",
-      fyle_extension = "md",
+      fyle_extension = c("R", "md"),
       fyle_exclusions = "red")
-
-data.frame(file = fyleIdentifier(fyle_extension = "log"),
-           send_date = Sys.Date())
 
 
 # Remove directories
 unlink(test_directory, recursive = TRUE, force = TRUE)
 
+
+
+# Test 4 - multiple extensions --------------------------------------------
+
+zz <- list()
+zz <- c(zz, fyleIdentifier(fyle_extension = "md"))
+zz <- c(zz, fyleIdentifier(fyle_extension = "R"))
+zzz <-  data.frame(file = zz,
+                   send_date = Sys.Date())
+fyleIdentifier(fyle_extension = c("md", "R"))
+fyleIdentifier(fyle_extension = c("md", "sldkfjsld", "R"))

@@ -1,3 +1,14 @@
+#' Send Email with Attachments via Outlook
+#'
+#' Uses RDCOMClient package.
+#' @param email_to Email address to send the files to
+#' @param email_attachments character vector of location of attachments to send. *fyleIdentifier()* provides suitable input.
+#' @param email_subject Optional email subject
+#' @param email_body Optional email body
+#' @param email_cc Optional email cc
+#' @param email_bcc Optional email bcc
+#' @keywords email, attachments, outlook
+#' @export
 
 fyleSender <- function(email_to,
                        email_attachments = NULL,
