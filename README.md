@@ -1,4 +1,4 @@
-# fysan: Batch send filetypes via Outlook email <img src="man/images/fysan-hex2.png" align="right" height = 150/>
+# fysan: Batch send filetypes via Outlook email <img src="inst/figures/imgfile.png" align="right" height = 150/>
 
 **Author:** [Harry Ahlas](http://harry.ahlas.com)
 
