@@ -14,15 +14,18 @@ devtools::install_github("harryahlas/fysan")
 ```
 
 ### RDCOMClient
-The *RDCOMClient* package is also required.  *RDCOMClient* may not be available on CRAN for your version of R. You can install it from [https://github.com/dkyleward/RDCOMClient](https://github.com/dkyleward/RDCOMClient) as noted here: [https://github.com/omegahat/RDCOMClient/issues/19](https://github.com/omegahat/RDCOMClient/issues/19).
+*fysan* requires the *RDCOMClient* package, which may not be available on CRAN for your version of R. You can install it from [https://github.com/dkyleward/RDCOMClient](https://github.com/dkyleward/RDCOMClient) as noted here: [https://github.com/omegahat/RDCOMClient/issues/19](https://github.com/omegahat/RDCOMClient/issues/19).
 
-We are assuming your machine already has a COM email client, such as Outlook, already set up.
+We are assuming your machine has a COM email client, such as Outlook, already set up.
 
 ## Functions
 
-- [x] *fyleIdentifier()* - list files in a directory of a certain type
-- [x] *fyleSender()* - email files with multiple attachments
-- [x] *fysan()* - email files in batches with patient iterations and create log
+- *fyleIdentifier()* - list files in a directory that contain specific extensions
+- *fyleSender()* - email files with multiple attachments in batches
+- *fysan()* 
+  - runs *fyleIdentifier()* to identify files for sending. 
+  - compares list to files previously sent to make sure files are not sent more than once.  This may occur if you do this over long periods of time.
+  - runs *fyleSender()* in batches
 
 ## Example
 
