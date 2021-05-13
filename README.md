@@ -81,3 +81,6 @@ After the exercise is complete, remove the example directory using the code belo
 ``` r
 unlink(example_directory, recursive = TRUE, force = TRUE)
 ```
+
+Link to my blog containing some additional information:
+[http://harry.ahlas.com/post/2021-05-13-email-attachments-in-batches-using-r-fysan/](http://harry.ahlas.com/post/2021-05-13-email-attachments-in-batches-using-r-fysan/)
