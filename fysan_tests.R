@@ -36,6 +36,7 @@ sampleDirectoryBuilder <- function(new_directory_tag) {#print(new_directory_tag)
 }
 
 # Directory names
+set.seed(123)
 sample_directory_list <- sample(colors(), 10)
 
 # Build directories
