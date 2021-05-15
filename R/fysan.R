@@ -33,7 +33,7 @@ fysan <- function(batch = 3,
                   email_body = "body",
                   email_cc = "",
                   email_bcc = "") {
-
+  #### ADD MAX_SIZE ARGUMENT
 
   # Import log or create if it doesn't exist
   if (file.exists("fysanlog.csv"))  {
@@ -50,6 +50,7 @@ fysan <- function(batch = 3,
                        fyleIdentifier(fyle_location = fyle_location,
                                       fyle_extension = extension,
                                       fyle_exclusions = fyle_exclusions)
+  #### RETRIEVE SIZES OF EACH FILE - ADD THIS TO fyleIdentifier
     )
   }
 
@@ -66,9 +67,23 @@ fysan <- function(batch = 3,
   # If there are no files left to send then end
   if(nrow(files_to_send) == 0) {warning("No Files Left to Send");return()}
 
+
+  #### ADD SIZE OF EACH FILE TO files_to_send
+  #### IDENTIFY FILES THAT ARE GREATER THAN MAX_FILE_SIZE
+  #### FOR EACH FILE GREATER THAN MAX_FILE_SIZE:
+  ######## REMOVE THEM FROM files_to_send
+  ######## IDENTIFY THEIR EXTENSION (eg .jpg)
+  ######## GET A UNIQUE CODE
+  ######## CREATE SPECIAL SPLITTER FOLDER
+  ######## SPLIT EACH LARGE FILE INTO N SMALLER FILES IN SPLITTER FOLDER WITH EXTENSION
+  ######## ADD SPLIT FILE TO files_to_send
+
   # split into batches
   number_of_batches <- ceiling(nrow(files_to_send) / batch)
   batches <- split(files_to_send, factor(sort(rank(row.names(files_to_send))%%number_of_batches)))
+  #### REDO ENTIRE SECTION ABOVE SO THAT IF THERE IS NO MAX_SIZE ARGUMENT THEN KEEP IT LIKE THAT.
+  #### IF THERE IS MAX_SIZE THEN DO THE BATCHES BASED ON BATCH AND FILE SIZE.
+  #### THEN NEED TO SPECIFY THE BATCHES HERE, NOT IN THE LOOP
 
   # loop through batches
   for (df in batches) {
@@ -84,6 +99,8 @@ fysan <- function(batch = 3,
       )
     Sys.sleep(interval)
   }
+
+  #### CREATE NEW FUNCTION FOR RECEIVING EMAIL TO COMBINE THE FILES BACK.
 
   # update log
   write.table(files_to_send, "fysanlog.csv", sep = ",", col.names = !file.exists("fysanlog.csv"), append = T, row.names = FALSE)
