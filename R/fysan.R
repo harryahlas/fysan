@@ -32,8 +32,8 @@ fysan <- function(batch = 3,
                   email_subject = "subject",
                   email_body = "body",
                   email_cc = "",
-                  email_bcc = "") {
-  #### ADD MAX_SIZE ARGUMENT
+                  email_bcc = "",
+                  max_bytes = NULL) {
 
   # Import log or create if it doesn't exist
   if (file.exists("fysanlog.csv"))  {
@@ -44,22 +44,21 @@ fysan <- function(batch = 3,
   }
 
   # Identify files
-  files_to_send <- as.character()
+  ##files_to_send <- as.character()
+  files_to_send <- data.frame(file = as.character(), size = as.numeric())
   for (extension in fyle_extension) { # append for each extension
-    files_to_send <- c(files_to_send,
-                       fyleIdentifier(fyle_location = fyle_location,
-                                      fyle_extension = extension,
-                                      fyle_exclusions = fyle_exclusions)
-  #### RETRIEVE SIZES OF EACH FILE - ADD THIS TO fyleIdentifier
-    )
+    files_to_send <- bind_rows(files_to_send,
+                               fyleIdentifier(fyle_location = fyle_location,
+                                              fyle_extension = extension,
+                                              fyle_exclusions = fyle_exclusions))
+    #### RETRIEVE SIZES OF EACH FILE - ADD THIS TO fyleIdentifier
   }
 
   # If no files found, then end
-  if(length(files_to_send) == 0) {warning("No matching files found"); return()}
+  if(nrow(files_to_send) == 0) {warning("No matching files found"); return()}
 
-  # Create data frame
-  files_to_send <- data.frame(file = files_to_send,
-                              send_date = Sys.Date())
+  # Add send date
+  files_to_send$send_date <- Sys.Date()
 
   # Remove files that were already sent
   files_to_send <- dplyr::anti_join(files_to_send, files_sent_log, by = "file")

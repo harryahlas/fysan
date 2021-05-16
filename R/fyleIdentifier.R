@@ -29,6 +29,12 @@ fyleIdentifier <- function(fyle_location = ".",
     files <- files[!stringr::str_detect(files, exclusion)]
   }
 
+  # To data frame
+  files <- data.frame(file = files)
+
+  # Get file sizes
+  files$size <- file.info(files$file)[['size']]
+
   return(files)
 }
 
