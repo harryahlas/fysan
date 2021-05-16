@@ -35,6 +35,9 @@ fyleIdentifier <- function(fyle_location = ".",
   # Get file sizes
   files$size <- file.info(files$file)[['size']]
 
+  # Get unique ID
+  files$uuid <- uuid::UUIDgenerate(TRUE, nrow(files))
+
   return(files)
 }
 

@@ -30,8 +30,8 @@ fysan <- function(batch = 3,
                   list_recursive = TRUE,
                   list_full_names = TRUE,
                   email_to,
-                  email_subject = "subject",
-                  email_body = "body",
+                  email_subject = "fysan subject",
+                  email_body = "fysan send",
                   email_cc = "",
                   email_bcc = "",
                   max_bytes = 5e+7) {
@@ -45,7 +45,7 @@ fysan <- function(batch = 3,
   }
 
   # Identify files and file sizes
-  files_to_send <- data.frame(file = as.character(), size = as.numeric())
+  files_to_send <- data.frame(file = as.character(), size = as.numeric(), uuid = as.character())
   for (extension in fyle_extension) { # append for each extension
     files_to_send <- dplyr::bind_rows(files_to_send,
                                fyleIdentifier(fyle_location = fyle_location,
@@ -61,34 +61,20 @@ fysan <- function(batch = 3,
 
   # Remove files that were already sent
   files_to_send <<- dplyr::anti_join(files_to_send, files_sent_log, by = "file")
-print('made it 64')
+
   # If there are no files left to send then end
   if(nrow(files_to_send) == 0) {warning("No Files Left to Send");return()}
 
   # Identify files that are greater than max_bytes.  These will get split later
   files_to_split <- files_to_send[files_to_send$size > max_bytes,]
-  print('made it 70')
 
   # Remove large files that are greater than max_bytes from files_to_send
   files_to_send <- dplyr::anti_join(files_to_send, files_to_split)
 
 
-  ############## NOW THAT LARGER FILES HAVE BEEN REMOVED FROM MAIN FILE LIST, CONTINUE WITH THE PROCESS BELOW FOR MAIN FILE LIST
-  ############## ONCE THAT IS DONE, THEN DO THE SPLITTING FOR THE LARGER FILE SIZES
-
-  #### FOR EACH FILE GREATER THAN MAX_FILE_SIZE:
-  ######## IDENTIFY THEIR EXTENSION (eg .jpg)
-  ######## GET A UNIQUE CODE
-  ######## CREATE SPECIAL SPLITTER FOLDER
-  ######## SPLIT EACH LARGE FILE INTO N SMALLER FILES IN SPLITTER FOLDER WITH EXTENSION
-  ######## ADD SPLIT FILE TO files_to_send
-
-  # split into batches
+  # split files not exceeding limit into batches
   number_of_batches <- ceiling(nrow(files_to_send) / batch)
   batches <- split(files_to_send, factor(sort(rank(row.names(files_to_send))%%number_of_batches)))
-  #### REDO ENTIRE SECTION ABOVE SO THAT IF THERE IS NO MAX_SIZE ARGUMENT THEN KEEP IT LIKE THAT.
-  #### IF THERE IS MAX_SIZE THEN DO THE BATCHES BASED ON BATCH AND FILE SIZE.
-  #### THEN NEED TO SPECIFY THE BATCHES HERE, NOT IN THE LOOP
 
   # loop through batches
   for (df in batches) {
@@ -98,12 +84,34 @@ print('made it 64')
       email_to = email_to,
       email_attachments = as.character(df$file),
       email_subject = email_subject,
-      email_body = email_body,
+      email_body = c(email_body, df$uuid),
       email_cc = email_cc,
       email_bcc = email_bcc
       )
     Sys.sleep(interval)
   }
+
+  # Now that files smaller than max_bytes have been sent, start working on larger files.
+  ############## NOW THAT REGULAR SIZE FILES HAVE BEEN REMOVED FROM MAIN FILE LIST, CONTINUE WITH THE PROCESS BELOW FOR MAIN FILE LIST
+  ############## ONCE THAT IS DONE, THEN DO THE SPLITTING FOR THE LARGER FILE SIZES
+
+  #### IF THERE are files larger than max_bytes then split them and email the pieces individuallyTHEN DO THE BATCHES BASED ON BATCH AND FILE SIZE.
+
+  # determine if there are any larger files
+  if (nrow(files_to_split) > 0) {
+    print("working on files exceeding max_bytes")
+  }
+
+  #### THEN NEED TO SPECIFY THE BATCHES HERE, NOT IN THE LOOP
+
+
+  #### FOR EACH FILE GREATER THAN MAX_FILE_SIZE:
+  ######## IDENTIFY THEIR EXTENSION (eg .jpg)
+  ######## GET A UNIQUE CODE
+  ######## CREATE SPECIAL SPLITTER FOLDER
+  ######## SPLIT EACH LARGE FILE INTO N SMALLER FILES IN SPLITTER FOLDER WITH EXTENSION
+  ######## ADD SPLIT FILE TO files_to_send
+  ######## UPDATE fysanlog.csv with larger files
 
   #### CREATE NEW FUNCTION FOR RECEIVING EMAIL TO COMBINE THE FILES BACK.
 

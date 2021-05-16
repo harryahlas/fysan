@@ -80,3 +80,24 @@ zzz <-  data.frame(file = zz,
                    send_date = Sys.Date())
 fyleIdentifier(fyle_extension = c("md", "R"))
 fyleIdentifier(fyle_extension = c("md", "sldkfjsld", "R"))
+
+
+
+# Test 5 ------------------------------------------------------------------
+
+fyleIdentifier("C:\\Users\\hahla\\Desktop\\github\\fysan\\R", "R")
+
+unlink("fysanlog.csv")
+
+fysan(batch = 3,
+      interval = 2, #seconds
+      email_to = "hahlas@hotmail.com",
+      email_subject = "test 5",
+      email_body = "",
+      email_cc = "",
+      email_bcc = "",
+      fyle_location = "C:\\Users\\hahla\\Desktop\\github\\fysan\\R", #"C:\\Users\\hahla\\Desktop\\Toss\\fysan_tests",
+      fyle_extension = c("R", "md"),
+      fyle_exclusions = "red",
+      max_bytes = 100000)
+

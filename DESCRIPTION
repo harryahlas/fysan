@@ -9,10 +9,11 @@ Authors@R:
 Description: TBD.
 License: MIT
 Imports:
-    RDCOMClient,
     dplyr,
+    RDCOMClient,
+    readr,
     stringr,
-    readr
+    uuid
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
