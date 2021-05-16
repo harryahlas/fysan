@@ -13,6 +13,7 @@
 #' @param email_body Optional email body
 #' @param email_cc Optional email cc
 #' @param email_bcc Optional email bcc
+#' @param max_bytes Maximum byte size. Emails with attachments exceeding this size will have the attachments split up. Those files will need to be glued together by TBD function.
 #' @keywords email, attachments, outlook
 #' @export
 #' @examples
@@ -33,7 +34,7 @@ fysan <- function(batch = 3,
                   email_body = "body",
                   email_cc = "",
                   email_bcc = "",
-                  max_bytes = NULL) {
+                  max_bytes = 5e+7) {
 
   # Import log or create if it doesn't exist
   if (file.exists("fysanlog.csv"))  {
@@ -43,15 +44,13 @@ fysan <- function(batch = 3,
     files_sent_log <- data.frame(file = as.character(NULL), send_date = NULL)
   }
 
-  # Identify files
-  ##files_to_send <- as.character()
+  # Identify files and file sizes
   files_to_send <- data.frame(file = as.character(), size = as.numeric())
   for (extension in fyle_extension) { # append for each extension
-    files_to_send <- bind_rows(files_to_send,
+    files_to_send <- dplyr::bind_rows(files_to_send,
                                fyleIdentifier(fyle_location = fyle_location,
                                               fyle_extension = extension,
                                               fyle_exclusions = fyle_exclusions))
-    #### RETRIEVE SIZES OF EACH FILE - ADD THIS TO fyleIdentifier
   }
 
   # If no files found, then end
@@ -61,13 +60,19 @@ fysan <- function(batch = 3,
   files_to_send$send_date <- Sys.Date()
 
   # Remove files that were already sent
-  files_to_send <- dplyr::anti_join(files_to_send, files_sent_log, by = "file")
-
+  files_to_send <<- dplyr::anti_join(files_to_send, files_sent_log, by = "file")
+print('made it 64')
   # If there are no files left to send then end
   if(nrow(files_to_send) == 0) {warning("No Files Left to Send");return()}
 
+  # Identify files that are greater than max_bytes.  These will get split later
+  files_to_split <- files_to_send[files_to_send$size > max_bytes,]
+  print('made it 70')
 
-  #### ADD SIZE OF EACH FILE TO files_to_send
+  # Remove large files that are greater than max_bytes from files_to_send
+  files_to_send <- dplyr::anti_join(files_to_send, files_to_split)
+
+
   #### IDENTIFY FILES THAT ARE GREATER THAN MAX_FILE_SIZE
   #### FOR EACH FILE GREATER THAN MAX_FILE_SIZE:
   ######## REMOVE THEM FROM files_to_send
