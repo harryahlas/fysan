@@ -92,28 +92,43 @@ fysan <- function(batch = 3,
   }
 
   # Now that files smaller than max_bytes have been sent, start working on larger files.
-  ############## NOW THAT REGULAR SIZE FILES HAVE BEEN REMOVED FROM MAIN FILE LIST, CONTINUE WITH THE PROCESS BELOW FOR MAIN FILE LIST
-  ############## ONCE THAT IS DONE, THEN DO THE SPLITTING FOR THE LARGER FILE SIZES
 
   #### IF THERE are files larger than max_bytes then split them and email the pieces individuallyTHEN DO THE BATCHES BASED ON BATCH AND FILE SIZE.
 
   # determine if there are any larger files
   if (nrow(files_to_split) > 0) {
     print("working on files exceeding max_bytes")
-  }
 
-  #### THEN NEED TO SPECIFY THE BATCHES HERE, NOT IN THE LOOP
+    ######## CREATE SPECIAL SPLITTER FOLDER
+    dir.create("split_file_temp")
+
+    for (i in (1:nrow(files_to_split))){
+      # determine number of splits needed
+      number_of_splits <- ceiling(files_to_split$size[i] / max_bytes)
+
+      # split files and write them to temp folder
+      fyleSplitter(file_to_split = file_to_split$file[i],
+                   file_size = file_to_split$size[i],
+                   uuid = file_to_split$uuid[i],
+                   split_number = number_of_splits,
+                   max_bytes = max_bytes,
+                   temp_folder = "split_file_temp")
+    }
+
+    # get list of files in temp folder !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+    # email all split files !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+    # update fysanlog.csv with split files full name !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+  }
 
 
   #### FOR EACH FILE GREATER THAN MAX_FILE_SIZE:
-  ######## IDENTIFY THEIR EXTENSION (eg .jpg)
-  ######## GET A UNIQUE CODE
-  ######## CREATE SPECIAL SPLITTER FOLDER
-  ######## SPLIT EACH LARGE FILE INTO N SMALLER FILES IN SPLITTER FOLDER WITH EXTENSION
-  ######## ADD SPLIT FILE TO files_to_send
-  ######## UPDATE fysanlog.csv with larger files
 
   #### CREATE NEW FUNCTION FOR RECEIVING EMAIL TO COMBINE THE FILES BACK.
+
+  ######## DELETE SPECIAL SPLITTER FOLDER
 
   # update log
   write.table(files_to_send, "fysanlog.csv", sep = ",", col.names = !file.exists("fysanlog.csv"), append = T, row.names = FALSE)
