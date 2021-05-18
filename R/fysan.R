@@ -91,6 +91,9 @@ fysan <- function(batch = 3,
     Sys.sleep(interval)
   }
 
+  # update log
+  write.table(files_to_send, "fysanlog.csv", sep = ",", col.names = !file.exists("fysanlog.csv"), append = T, row.names = FALSE)
+
   # Now that files smaller than max_bytes have been sent, start working on larger files.
 
   #### IF THERE are files larger than max_bytes then split them and email the pieces individuallyTHEN DO THE BATCHES BASED ON BATCH AND FILE SIZE.
@@ -107,19 +110,37 @@ fysan <- function(batch = 3,
       number_of_splits <- ceiling(files_to_split$size[i] / max_bytes)
 
       # split files and write them to temp folder
-      fyleSplitter(file_to_split = file_to_split$file[i],
-                   file_size = file_to_split$size[i],
-                   uuid = file_to_split$uuid[i],
+      fyleSplitter(file_to_split = files_to_split$file[i],
+                   file_size = files_to_split$size[i],
+                   uuid = files_to_split$uuid[i],
                    split_number = number_of_splits,
                    max_bytes = max_bytes,
                    temp_folder = "split_file_temp")
     }
 
-    # get list of files in temp folder !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    # get list of files in temp folder
+    split_files_list <- list.files("split_file_temp", full.names = T)
 
-    # email all split files !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    for (i in (1:length(split_files_list))) {
+      # email all split files !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+      print(paste("Emailing file", split_files_list[i]))
+      fyleSender(
+        email_to = email_to,
+        email_attachments = as.character(paste0(getwd(), "/", split_files_list[i])),
+        email_subject = paste(email_subject, "split", basename(split_files_list[i])),
+        email_body = c(email_body),#, df$uuid),
+        email_cc = email_cc,
+        email_bcc = email_bcc
+      )
+      Sys.sleep(interval)
 
-    # update fysanlog.csv with split files full name !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    }
+
+    # update fysanlog.csv with split files full name
+    write.table(files_to_split, "fysanlog.csv", sep = ",", col.names = !file.exists("fysanlog.csv"), append = T, row.names = FALSE)
+
+    # Remove temp folder
+    unlink("split_file_temp", force = T, recursive = T)
 
   }
 
@@ -130,8 +151,6 @@ fysan <- function(batch = 3,
 
   ######## DELETE SPECIAL SPLITTER FOLDER
 
-  # update log
-  write.table(files_to_send, "fysanlog.csv", sep = ",", col.names = !file.exists("fysanlog.csv"), append = T, row.names = FALSE)
 
   return(batches)
 }
