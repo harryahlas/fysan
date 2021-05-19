@@ -1,5 +1,13 @@
-# This function saves all attachments from emails containing specific text in the subject
+#' meh
+#'
+#' This function saves all attachments from emails containing specific text in the subject
+#' @param subject_keyword meh
+#' @param max_recent_emails meh
+#' @param attachment_folder meh
+#' @keywords filesearch, find, files, extension
+#' @export
 
+#
 # https://stackoverflow.com/questions/45577698/download-attachment-from-an-outlook-email-using-r
 # https://stackoverflow.com/questions/45577698/download-attachment-from-an-outlook-email-using-r
 
