@@ -17,7 +17,7 @@ fyleSplitter <- function(file_to_split, file_size, uuid, split_number, max_bytes
     end_cursor <- start_cursor + max_bytes - 1
     split_temp <- file_to_split_import[start_cursor:end_cursor]
 
-    readr::write_file(split_temp, paste0(temp_folder, "/split_", file_split, "_", uuid, "_", basename(file_to_split)))
+    readr::write_file(split_temp, paste0(temp_folder, "/split_", uuid, "_", file_split, "_", basename(file_to_split)))
 
     start_cursor <- start_cursor + max_bytes
 
