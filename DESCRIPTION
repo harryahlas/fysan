@@ -12,6 +12,7 @@ Imports:
     dplyr,
     RDCOMClient,
     readr,
+    strex,
     stringr,
     uuid
 Encoding: UTF-8
