@@ -3,7 +3,7 @@
 # max_bytes <- 1000
 # split_number <- ceiling(file_size / max_bytes)
 
-fyleSplitter <- function(file_to_split, file_size, uuid, split_number, max_bytes, temp_folder = "saved_attachments") {
+fyleSplitter <- function(file_to_split, file_size, uuid, split_number, max_bytes, temp_folder = "split_file_temp") {
 
   file_to_split_import <- readr::read_file_raw(file_to_split)
 

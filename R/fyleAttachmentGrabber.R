@@ -5,7 +5,7 @@
 
 fyleAttachmentGrabber <- function(subject_keyword,
                                   max_recent_emails = 1000,
-                                  attachment_folder = "saved_attachments") {
+                                  attachment_folder = "saved_attachment_fyles") {
 
   # # Parameters for function
   # subject_keyword <- "test 12 split" # Keyword in subject to search for
