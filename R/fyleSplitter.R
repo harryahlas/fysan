@@ -14,7 +14,7 @@ fyleSplitter <- function(file_to_split, file_size, uuid, split_number, max_bytes
   for (file_split in (1:split_number)) {
     print(file_split)
 
-    end_cursor <- start_cursor + max_bytes - 1
+    end_cursor <- min(start_cursor + max_bytes - 1, file_size)
     split_temp <- file_to_split_import[start_cursor:end_cursor]
 
     readr::write_file(split_temp, paste0(temp_folder, "/split_", uuid, "_", file_split, "_", basename(file_to_split)))
@@ -24,6 +24,9 @@ fyleSplitter <- function(file_to_split, file_size, uuid, split_number, max_bytes
   }
 
 }
+
+# fyleIdentifier("C:\\Users\\hahla\\Desktop\\github\\fysan\\split_file_temp",fyle_extension = "R")
+# fyleSplitter("C:\\Users\\hahla\\Desktop\\github\\fysan\\saved_attachment_fyles\\fyleGluer.R", 2197, uuid = "ttt", 2, 2000)
 
 # fyleSplitter(file_to_split, file_size, uuid = "ttt", split_number, max_bytes,)
 #
