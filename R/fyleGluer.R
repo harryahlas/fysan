@@ -1,13 +1,16 @@
+#' Glue Together Email Attachments Split by fyleSplitter()
+#'
+#' This function reconstructs emails that have been split by fyleSplitter() and deletes the individual splits.
+#' @param attachment_folder Optional name of folder to save attachments to.  This folder will be created in your current directory.  Specifying a directory with a full path may work but is untested.
+#' @keywords email, attachment
+#' @export
 
-############NEXT: COPY HARD CODE BELOW TO FUNCTION
-fyleGluer <- function(temp_folder = "saved_attachment_fyles") {
+fyleGluer <- function(attachment_folder = "saved_attachment_fyles") {
 
-  list.files(temp_folder)
-
-  #temp_folder = "saved_attachment_fyles"
+  list.files(attachment_folder)
 
   # Identify broken files.  They start with 'split_' and contain at least 4 '-' and 3 '_'
-  all_files <- list.files(temp_folder)
+  all_files <- list.files(attachment_folder)
   broken_files <- data.frame(filename = all_files[startsWith(all_files,"split_") &
                                                     stringr::str_count(all_files,"-") >= 4 &
                                                     stringr::str_count(all_files,"_") >= 3])
@@ -28,29 +31,18 @@ fyleGluer <- function(temp_folder = "saved_attachment_fyles") {
 
     # Reac each split of each broken file, then write/append to the broken file's original name
     for (j in 1:split_counts$split_count[i]) {
-      split_file_location <- paste0(temp_folder, "/",
+      split_file_location <- paste0(attachment_folder, "/",
                                 broken_files$filename[broken_files$glued_filename == split_counts$glued_filename[i] &
                                                         broken_files$split_number == j ])
       split_data <- readr::read_file_raw(split_file_location)
-      readr::write_file(split_data, paste0(temp_folder, "/", split_counts$glued_filename[i]), append = TRUE)
+      readr::write_file(split_data, paste0(attachment_folder, "/", split_counts$glued_filename[i]), append = TRUE)
 
       # delete the split
       unlink(split_file_location)
     }
-
-    #readr::write_file(paste0(temp_list, collapse = ""), paste0(temp_folder, "/", split_counts$glued_filename[i]), append = TRUE)
-
-    # Identify how many splits there were
-
-    # for each split (minus 1) get the contents of the attachment
-
-    # write/append the contents of the attachment
-
-
   }
 }
 
-fyleGluer()
 
 
 
