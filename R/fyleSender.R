@@ -2,7 +2,7 @@
 #'
 #' Uses RDCOMClient package.
 #' @param email_to Email address to send the files to
-#' @param email_attachments character vector of location of attachments to send. *fyleIdentifier()* provides suitable input.
+#' @param email_attachments character vector of location of attachments to send. *fyleIdentifier()$file* provides suitable input.
 #' @param email_subject Optional email subject. Should have something unique about it so you can search through it later using fyleAttachmentGrabber()'s *subject_keyword* argument.
 #' @param email_body Optional email body
 #' @param email_cc Optional email cc

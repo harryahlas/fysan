@@ -3,7 +3,7 @@
 #' Uses RDCOMClient package.  Will send email from default Outlook email address.
 #' @param batch How many attachments per email. Defaults to 3.
 #' @param interval How many seconds to wait between each email send. Defaults to 1.  Can be handy to keep from overloading.
-#' @param fyle_location Location of directory to search. Will default to search recursively. Required.
+#' @param fyle_location Location of directory to search. Will default to search recursively. Required. Must be the full path, not relative.
 #' @param fyle_extension The extension(s) you want to search for, e.g. *c("txt", "R")* will send files that end in .txt or .R
 #' @param fyle_exclusions Files with this string anywhere in the file name or location will not be sent.  Optional.
 #' @param list_recursive Set to FALSE if you do not want to search through children of *fyle_location*. Generally keep TRUE.
