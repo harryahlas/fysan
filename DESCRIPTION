@@ -1,6 +1,6 @@
 Package: fysan
 Title: Batch Send Filetypes via Outlook Email
-Version: 0.0.0.9003
+Version: 0.0.0.9004
 Authors@R: 
     person(given = "Harry",
            family = "Ahlas",

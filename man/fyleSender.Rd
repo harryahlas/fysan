@@ -16,9 +16,9 @@ fyleSender(
 \arguments{
 \item{email_to}{Email address to send the files to}
 
-\item{email_attachments}{character vector of location of attachments to send. \emph{fyleIdentifier()} provides suitable input.}
+\item{email_attachments}{character vector of location of attachments to send. \emph{fyleIdentifier()$file} provides suitable input.}
 
-\item{email_subject}{Optional email subject}
+\item{email_subject}{Optional email subject. Should have something unique about it so you can search through it later using fyleAttachmentGrabber()'s \emph{subject_keyword} argument.}
 
 \item{email_body}{Optional email body}
 

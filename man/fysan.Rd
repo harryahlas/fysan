@@ -41,7 +41,7 @@ fysan(
 
 \item{interval}{How many seconds to wait between each email send. Defaults to 1.  Can be handy to keep from overloading.}
 
-\item{fyle_location}{Location of directory to search. Will default to search recursively. Required.}
+\item{fyle_location}{Location of directory to search. Will default to search recursively. Required. Must be the full path, not relative.}
 
 \item{fyle_extension}{The extension(s) you want to search for, e.g. \emph{c("txt", "R")} will send files that end in .txt or .R}
 
