@@ -1,14 +1,13 @@
-#' meh
+#' Retrieve Attachments from Email
 #'
-#' This function saves all attachments from emails containing specific text in the subject
-#' @param subject_keyword meh
-#' @param max_recent_emails meh
-#' @param attachment_folder meh
+#' This function saves all attachments from emails containing specific text in the subject.  Works with COM email clients.
+#' @param subject_keyword Search string or regex, though regex is not thoroughly tested. *fyleAttachmentGrabber()* will search through your email inbox and pull all attachments from any email that has this string in its subject.
+#' @param max_recent_emails How many emails to look at.  *fyleAttachmentGrabber()* will search through *max_recent_emails* or the number of emails in your inbox, whichever is less.
+#' @param attachment_folder Optional name of folder to save attachments to.  This folder will be created in your current directory.  Specifying a directory with a full path may work but is untested.
 #' @keywords filesearch, find, files, extension
 #' @export
 
-#
-# https://stackoverflow.com/questions/45577698/download-attachment-from-an-outlook-email-using-r
+# Thanks:
 # https://stackoverflow.com/questions/45577698/download-attachment-from-an-outlook-email-using-r
 
 fyleAttachmentGrabber <- function(subject_keyword,
