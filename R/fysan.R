@@ -103,6 +103,7 @@ fysan <- function(batch = 3,
     print("working on files exceeding max_bytes")
 
     ######## CREATE SPECIAL SPLITTER FOLDER
+    if (dir.exists("split_file_temp")) {stop("remove split_file_temp directory before proceeding")}
     dir.create("split_file_temp")
 
     for (i in (1:nrow(files_to_split))){
