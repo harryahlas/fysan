@@ -1,19 +1,20 @@
 
 # Test 1 ------------------------------------------------------------------
 
-
-test_directory <- "C:\\Users\\hahla\\Desktop\\Toss\\fysan_tests\\"
+library(fysan)
+test_directory <- "C:\\Users\\hahla\\Desktop\\Toss\\fysan_tests\\" #needs to be full location
 dir.create(test_directory)
 dir.create(paste0(test_directory, "/test_directory_1"))
 dir.create(paste0(test_directory, "/test_directory_2"))
 writeLines("hello 0", paste0(test_directory, "hi0.txt"))
 writeLines("don't send this file", paste0(test_directory, "/DontSendThis.R"))
-writeLines("hello 1", paste0(test_directory, "test_directory_1/hi1.txt"))
-writeLines("hello 2", paste0(test_directory, "test_directory_1/hi2.txt"))
+writeLines("hello 1", paste0(test_directory, "/test_directory_1/hi1.txt"))
+writeLines("hello 2", paste0(test_directory, "/test_directory_1/hi2.txt"))
 
 fyleSender("hahlas@hotmail.com",
-           fyleIdentifier(fyle_location = test_directory, fyle_extension = "txt", fyle_exclusions = "hi0"),
-           "test emailxxx", "here is the body")
+           fyleIdentifier(fyle_location = test_directory, fyle_extension = "txt", fyle_exclusions = "hi0")$file,
+           "test email 01", "here is the body")
+
 
 # Remove directories
 unlink(test_directory, recursive = TRUE, force = TRUE)
@@ -44,24 +45,24 @@ lapply(sample_directory_list, sampleDirectoryBuilder)
 
 # Mail files
 fyleSender("hahlas@hotmail.com",
-           fyleIdentifier(fyle_location = test_directory, fyle_extension = "jpg", fyle_exclusions = "red"),
-           "test emailxxx", "here is the body")
+           fyleIdentifier(fyle_location = test_directory, fyle_extension = "jpg", fyle_exclusions = "red")$file,
+           "test email 02", "here is the body")
 
 
 
 # Test 3 ------------------------------------------------------------------
 
-### delete log
+# delete log
 unlink("fysanlog.csv")
 
 fysan(batch = 3,
       interval = 2, #seconds
       email_to = "hahlas@hotmail.com",
-      email_subject = "try5",
-      email_body = "mert mert",
+      email_subject = "test email 03",
+      email_body = "more tests",
       email_cc = "",
       email_bcc = "",
-      fyle_location = getwd(), #"C:\\Users\\hahla\\Desktop\\Toss\\fysan_tests",
+      fyle_location = "C:\\Users\\hahla\\Desktop\\Toss\\fysan_tests",
       fyle_extension = c("R", "md"),
       fyle_exclusions = "red")
 
@@ -73,31 +74,33 @@ unlink(test_directory, recursive = TRUE, force = TRUE)
 
 # Test 4 - multiple extensions --------------------------------------------
 
-zz <- list()
-zz <- c(zz, fyleIdentifier(fyle_extension = "md"))
-zz <- c(zz, fyleIdentifier(fyle_extension = "R"))
-zzz <-  data.frame(file = zz,
-                   send_date = Sys.Date())
 fyleIdentifier(fyle_extension = c("md", "R"))
 fyleIdentifier(fyle_extension = c("md", "sldkfjsld", "R"))
 
 
-
 # Test 5 ------------------------------------------------------------------
-
-fyleIdentifier("C:\\Users\\hahla\\Desktop\\github\\fysan\\R", "R")
+# Send split attachments
 
 unlink("fysanlog.csv")
 
-fysan(batch = 3,
+fysan(batch = 4,
       interval = 2, #seconds
       email_to = "hahlas@hotmail.com",
-      email_subject = "test 5",
+      email_subject = "test email 05",
       email_body = "",
       email_cc = "",
       email_bcc = "",
       fyle_location = "C:\\Users\\hahla\\Desktop\\github\\fysan\\R", #"C:\\Users\\hahla\\Desktop\\Toss\\fysan_tests",
       fyle_extension = c("R", "md"),
       fyle_exclusions = "red",
-      max_bytes = 100000)
+      max_bytes = 3000)
+
+
+# Test 6 fyleAttachmentGrabber() ------------------------------------------
+# Retrieve and glue split attachments
+
+fyleAttachmentGrabber("test email 05")
+fyleGluer()
+
+unlink("fysanlog.csv")
 
