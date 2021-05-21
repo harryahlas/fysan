@@ -26,6 +26,7 @@ We are assuming your machine has a COM email client, such as Outlook, already se
   - runs *fyleIdentifier()* to identify files for sending. 
   - compares list to files previously sent to make sure files are not sent more than once.  This may occur if you do this over long periods of time.
   - runs *fyleSender()* in batches
+- *fyleAttachmentGrabber()* - retrieve attachments from your COM email inbox.
 
 ## Example
 
@@ -64,7 +65,7 @@ library(fysan)
 fysan(batch = 3,                         # How many attachments to send per email
       interval = 2,                      # How many seconds to wait after sending each email
       email_to = "email@address.com",    # Email to send to
-      email_subject = "Test",            # Email subject
+      email_subject = "fysan email test",# Email subject
       email_body = "This is a test",     # Email body
       email_cc = "",                     # cc
       email_bcc = "",                    # bcc
@@ -82,5 +83,52 @@ After the exercise is complete, remove the example directory using the code belo
 unlink(example_directory, recursive = TRUE, force = TRUE)
 ```
 
+## Retrieving Attachments
+
+If you used *fysan* to send a series of emails and attachments then the *fyleAttachmentGrabber()* function can automatically save the attachments from your email inbox.  The code below will save the attachments sent by the example above into a folder called "attachments".
+
+``` r
+fyleAttachmentGrabber(subject_keyword = "fysan email test" # Text found in the subject of the emails sent with fysan()
+                      attachment_folder = "attachments")   # Name of new folder to save to
+```
+
+## Splitting and Gluing Large Files
+
+Your email client may have a limitation around attachment sizes. If you are sending larger files, you may run into an issue where you cannot send an attachment because it is too large. *fysan* enables you to send a large attachment by:
+
+1. Splitting the large file into smaller files
+2. Emailing the split files separately
+3. Gluing the split files back together.  
+
+#### Splitting and Sending a Large File - Example
+``` r
+# Create dummy file
+dir.create("large_attachment")
+write(rep("lots of text", 100000), "large_attachment/large_file.txt")
+
+# fysan automatically splits any attachment larger than max_bytes below
+fysan(fyle_location = "large_attachment", 
+      fyle_extension = "txt", 
+      email_to = "hahlas@hotmail.com",
+      email_subject = "fysan large email", 
+      max_bytes = 1000000) # Attachments larger than max_bytes will be split 
+                           # into files no larger than max_bytes
+
+# Delete dummy file and folder
+unlink("large_attachment", recursive = T))
+```
+
+#### Retrieving a Split File - Example
+``` r
+fyleAttachmentGrabber("fysan large email")
+fyleGluer()
+```
+
+Note that, to retrieve attachments with *fyleAttachmentGrabber()* and/or glue the files back together using *fyleGluer()*, you will need *fysan* installed on the machine retrieving the attachments.
+
+
+#### Additional Information
+
 Link to my blog containing some additional information:
 [http://harry.ahlas.com/post/2021-05-13-email-attachments-in-batches-using-r-fysan/](http://harry.ahlas.com/post/2021-05-13-email-attachments-in-batches-using-r-fysan/)
+
