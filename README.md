@@ -27,6 +27,7 @@ We are assuming your machine has a COM email client, such as Outlook, already se
   - compares list to files previously sent to make sure files are not sent more than once.  This may occur if you do this over long periods of time.
   - runs *fyleSender()* in batches
 - *fyleAttachmentGrabber()* - retrieve attachments from your COM email inbox.
+- *fyleGluer()* - glue large files that have been split back together
 
 ## Example
 
@@ -100,7 +101,7 @@ Your email client may have a limitation around attachment sizes. If you are send
 2. Emailing the split files separately
 3. Gluing the split files back together.  
 
-#### Splitting and Sending a Large File - Example
+#### Splitting and Sending a Large File
 ``` r
 # Create dummy file
 dir.create("large_attachment")
@@ -118,7 +119,7 @@ fysan(fyle_location = "large_attachment",
 unlink("large_attachment", recursive = T))
 ```
 
-#### Retrieving a Split File - Example
+#### Retrieving a Split File
 ``` r
 fyleAttachmentGrabber("fysan large email")
 fyleGluer()
